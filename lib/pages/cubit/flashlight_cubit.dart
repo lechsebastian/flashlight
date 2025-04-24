@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:torch_light/torch_light.dart';
 
@@ -17,9 +20,23 @@ class FlashlightCubit extends Cubit<FlashlightState> {
         await TorchLight.enableTorch();
       }
       emit(FlashlightState(isTurnedOn: !state.isTurnedOn));
-    } catch (message) {
+    } on PlatformException catch (e, stackTrace) {
+      log('Platform exception: ${e.message}', error: e, stackTrace: stackTrace);
       scaffoldMessenger.showSnackBar(
-        SnackBar(content: Text('Error has been occured: $message')),
+        SnackBar(
+          content: Text(
+            'Nie udało się przełączyć latarki: ${e.message}',
+          ),
+        ),
+      );
+    } catch (e, stackTrace) {
+      log('Unknown exception: $e', error: e, stackTrace: stackTrace);
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Wystąpił nieoczekiwany błąd',
+          ),
+        ),
       );
     }
   }
