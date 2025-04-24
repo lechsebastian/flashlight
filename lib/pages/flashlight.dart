@@ -12,26 +12,21 @@ class FlashLight extends StatelessWidget {
       child: BlocBuilder<FlashlightCubit, FlashlightState>(
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(
-              backgroundColor: state.isTurnedOn ? Colors.black : Colors.white,
-            ),
-            backgroundColor: state.isTurnedOn ? Colors.black : Colors.white,
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: IconButton(
-                    onPressed: () {
-                      context.read<FlashlightCubit>().toggleFlashlight(context);
-                    },
-                    icon: const Icon(
-                      Icons.power_settings_new,
-                      size: 120,
-                    ),
-                    color: state.isTurnedOn ? Colors.white : Colors.black,
+            body: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              color: state.isTurnedOn ? Colors.grey.shade900 : Colors.white,
+              child: Center(
+                child: IconButton(
+                  onPressed: () {
+                    context.read<FlashlightCubit>().toggleFlashlight(context);
+                  },
+                  icon: const Icon(
+                    Icons.power_settings_new,
+                    size: 120,
                   ),
+                  color: state.isTurnedOn ? Colors.white : Colors.black,
                 ),
-              ],
+              ),
             ),
           );
         },
